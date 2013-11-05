@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :microposts, dependent: :destroy
  
   require 'digest'
   
@@ -16,6 +17,11 @@ class User < ActiveRecord::Base
   
   def User.new_remember_token
     SecureRandom.urlsafe_base64
+  end
+  
+  def feed
+    # This is preliminary.  See "Following users" for the full implemenation
+    Micropost.where("user_id = ?", id)
   end
   
   def User.encrypt(token)
